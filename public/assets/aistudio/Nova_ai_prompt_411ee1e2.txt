@@ -1,0 +1,1016 @@
+NOVA AI — ULTIMATE PERSONAL AI ASSISTANT
+
+Master Development Prompt for Google AI Studio
+
+Build a complete, functional, local-first, multimodal personal AI assistant named Nova AI for Web, PWA, and Android APK.
+
+You are a senior full-stack developer, Android engineer, AI systems architect, security engineer, and UI/UX designer. Implement a real application, not just a UI mockup. Create the source files, connect functional services, test the application, and fix errors.
+
+Preserve all existing working code when modifying an existing project. Do not remove features to simplify the implementation.
+
+If a feature needs credentials, permissions, a native plugin, or an external service, implement the supported integration and clearly explain its setup. Never simulate success for an operation that did not happen.
+
+1. PRODUCT VISION
+
+Nova AI is a personal assistant that can:
+
+- Chat naturally through text and voice.
+- Understand Hindi, English, and Hinglish.
+- Generate and understand images.
+- Choose suitable AI models automatically.
+- Let the user manually select a specific AI provider.
+- Manage multiple API keys and models.
+- Remember user-approved information locally.
+- Search contacts and initiate phone calls through supported Android integrations.
+- Open applications and perform supported actions through voice commands.
+- Search YouTube and play selected videos.
+- Open Chrome and perform web searches.
+- Control Instagram navigation and Reels where technically supported.
+- Control supported phone features such as flashlight, camera, and screen locking.
+- Manage chat history, settings, permissions, and privacy.
+
+The application must have a polished interface, real integrations, reliable error handling, and user-controlled permissions.
+
+2. TARGET PLATFORMS
+
+Build:
+
+1. Responsive web application.
+2. Installable Progressive Web App where supported.
+3. Android application packaged using Capacitor and native Android modules where appropriate.
+4. A buildable Android project with debug and release APK instructions.
+
+Use a shared TypeScript codebase where practical, with platform-specific implementations behind service interfaces.
+
+Recommended stack:
+
+- React and TypeScript.
+- Vite.
+- Tailwind CSS.
+- Lucide icons.
+- IndexedDB for structured local data.
+- Dexie or an equivalent maintained IndexedDB library.
+- Web Crypto API for browser encryption.
+- Capacitor for Android packaging.
+- Android Keystore-backed credential protection.
+- Native Android integrations for supported phone actions.
+- Provider-specific SDKs or documented HTTP APIs.
+- Vitest and React Testing Library.
+
+Inspect the available development environment first and adapt the stack to what is supported.
+
+3. DESIGN AND USER INTERFACE
+
+Follow the user's uploaded Nova AI sketches.
+
+Branding
+
+Application name: Nova AI.
+
+Create a premium AI interface with a clean Nova logo, subtle animations, rounded cards, clear typography, and polished mobile interactions.
+
+Dark theme
+
+- Near-black or charcoal background.
+- Elevated dark-gray cards.
+- White and muted-gray text.
+- Violet, indigo, or blue accents.
+- Subtle glow effects.
+
+Light theme
+
+- White or soft-gray background.
+- Dark readable text.
+- Light cards and borders.
+- Consistent violet or blue accents.
+
+Provide Dark, Light, and System theme options. Persist the theme locally.
+
+Main screen
+
+Include:
+
+- Hamburger menu.
+- Nova AI logo and title.
+- New Chat button.
+- Create Image shortcut.
+- Chat Model indicator.
+- Chat history sidebar.
+- Main conversation area.
+- Message composer.
+- Image attachment button.
+- Voice input button.
+- Send button.
+
+Welcome text:
+
+"Hello, I'm Nova."
+
+"What would you like to explore today?"
+
+Show shortcuts for:
+
+- Text Chat.
+- Voice Chat.
+- Create Image.
+- API Keys.
+- Memory.
+- Settings.
+
+All buttons must perform their actual actions.
+
+Navigation drawer
+
+Include:
+
+- New Chat.
+- Search Chat History.
+- Recent Conversations.
+- Pinned Chats.
+- Voice Chat.
+- Create Image.
+- API Keys and Models.
+- Personal Memory.
+- App Controls.
+- Settings.
+- Privacy and Permissions.
+
+Support mobile drawers and desktop sidebars.
+
+4. INTELLIGENT API MANAGER
+
+This is a core feature of Nova AI. Implement it as a separate, reusable subsystem rather than embedding provider logic in UI components.
+
+4.1 Provider support
+
+Create an extensible adapter architecture for:
+
+- Google Gemini.
+- OpenAI.
+- xAI Grok.
+- Other supported AI providers.
+- OpenAI-compatible APIs with configurable endpoints.
+- Image generation providers.
+- Speech recognition and text-to-speech providers.
+- Real-time voice providers.
+
+Only claim support for providers and features that have working adapters.
+
+Use each provider's official documentation for endpoints, authentication, model discovery, request formats, streaming, and capability information.
+
+Do not assume every provider supports the same capabilities.
+
+4.2 Add API interface
+
+Create an API Manager screen with:
+
+- Add API.
+- Provider search.
+- Provider selector.
+- API key input.
+- Custom endpoint when supported.
+- Test Connection button.
+- Discover Models button.
+- Provider status.
+- Model search bar.
+- Model selection.
+- Edit and remove provider.
+- Enable and disable provider.
+- Set default provider.
+- Set default model.
+- Configure task-specific models.
+
+The provider search bar must help users find a provider or model by name.
+
+Provide a "Paste API Key" action.
+
+When the user pastes an API key, Nova should attempt provider identification using supported methods.
+
+Provider identification workflow
+
+1. Accept the key only after an explicit user action.
+2. Inspect recognizable provider-specific prefixes only as hints, never as definitive proof.
+3. Ask the user to select a provider if identification is uncertain.
+4. Validate the key through the selected provider's documented API.
+5. Discover available models through supported endpoints.
+6. Determine available capabilities from documented metadata and verified model information.
+7. Let the user confirm the configuration.
+8. Store the credential using the platform's secure storage mechanism.
+
+Do not try every provider with a secret key indiscriminately. Never send a credential to an endpoint unless the endpoint is known to belong to the selected provider.
+
+Some APIs do not support model discovery or capability queries. For those providers, allow manual model entry and explain the limitation.
+
+Do not display secret keys in logs, URLs, analytics, error reports, or UI after saving.
+
+4.3 API and model status
+
+For each provider, display:
+
+- Provider name.
+- Connection status.
+- Last successful connection check.
+- Available models.
+- Supported capabilities.
+- User-defined priority.
+- Enabled or disabled state.
+
+Possible statuses:
+
+- Connected.
+- Authentication failed.
+- Rate limited.
+- Quota exceeded.
+- Network unavailable.
+- Configuration required.
+- Unsupported capability.
+- Unknown status.
+
+Do not claim that a provider is connected merely because its key has been saved.
+
+A connection check must make a real, minimal request when possible.
+
+4.4 Auto Mode
+
+Create a prominent mode selector:
+
+- Auto Mode.
+- Manual Mode.
+
+In Auto Mode, Nova chooses the most appropriate enabled and configured provider for each task.
+
+Examples:
+
+User: "Explain photosynthesis."
+
+Choose a configured text model suitable for general conversation.
+
+User: "Write a complex React application."
+
+Prefer a configured model with strong coding capabilities, based on explicit capability metadata, user priorities, and measured performance where available.
+
+User: "Generate an image of a futuristic city."
+
+Choose an enabled image-generation provider that supports image generation.
+
+User: "Analyze this photograph."
+
+Choose a model that supports image understanding.
+
+User: "Talk to me continuously in Hindi."
+
+Choose a compatible real-time audio model or a configured speech-recognition, text-generation, and speech-synthesis pipeline.
+
+User: "Summarize this long document."
+
+Choose a compatible model with sufficient context capacity.
+
+Auto Router algorithm
+
+Implement a task router that:
+
+1. Classifies the request into a task type.
+2. Identifies required capabilities.
+3. Filters providers that are disabled, unconfigured, incompatible, or unavailable.
+4. Considers user-defined priority, capability support, latency, rate limits, estimated cost, and context capacity when reliable information is available.
+5. Selects the best eligible provider and model.
+6. Executes the request using the correct adapter.
+7. Records non-sensitive routing metadata locally.
+8. Displays which provider and model handled the request.
+
+Do not invent real-time speed rankings, quality scores, pricing, or benchmark results.
+
+If performance statistics are available, derive estimates from actual observations. Otherwise, use explicit user priorities and configured model capabilities.
+
+If multiple models are equally suitable, use a predictable selection rule.
+
+If no eligible provider exists, ask the user to configure one.
+
+Auto Mode failure handling
+
+If a request fails:
+
+- Explain the failure.
+- Distinguish authentication, quota, network, and model errors.
+- Retry transient failures within reasonable limits.
+- Consider an alternative provider only in Auto Mode and only if allowed by user settings.
+- Never switch providers silently when that would violate privacy or cost preferences.
+- Never retry invalid credentials indefinitely.
+
+Provide a setting to allow or disable automatic fallback.
+
+Default to transparent provider selection and conservative cost controls.
+
+4.5 Manual Mode
+
+The user can select:
+
+- Gemini.
+- OpenAI.
+- Grok.
+- Another configured provider.
+- A specific model from that provider.
+
+When Manual Mode is enabled, use only the selected provider.
+
+If the selected provider fails, show its error and allow the user to retry or manually change providers. Do not silently fall back to another provider.
+
+Keep the selected provider and model visible in the chat interface.
+
+4.6 Multi-Model Collaboration
+
+Add an optional feature called "Multi-Model Collaboration."
+
+When enabled, Nova may:
+
+1. Send a task to a primary model.
+2. Ask another configured model for a review or specialized subtask.
+3. Combine the outputs into a final response.
+
+Example:
+
+- Model A drafts code.
+- Model B reviews the code.
+- Nova presents the result and relevant caveats.
+
+Allow the user to configure:
+
+- Number of models.
+- Allowed providers.
+- Primary model.
+- Review model.
+- Maximum additional requests.
+- Maximum estimated budget.
+- Whether collaboration is permitted for the current task.
+
+Disabled by default.
+
+Do not send private conversation content to additional providers without making the data-sharing behavior clear to the user.
+
+Respect Manual Mode: collaboration is disabled unless the user explicitly enables it and selects the permitted models. Never call an unselected provider secretly.
+
+Avoid redundant requests and infinite model-to-model loops.
+
+4.7 Task-specific model settings
+
+Allow separate models for:
+
+- General text.
+- Coding.
+- Reasoning and complex tasks.
+- Image understanding.
+- Image generation.
+- Speech recognition.
+- Speech synthesis.
+- Real-time audio.
+- Document summarization.
+
+Provide Auto or Manual selection for each category.
+
+Where a single model supports several capabilities, it may be reused when appropriate.
+
+5. API SECURITY
+
+API keys are secrets.
+
+For the browser application:
+
+- Never hardcode real API keys.
+- Never expose keys through VITE_ or other public frontend environment variables.
+- Never store plaintext keys in localStorage or ordinary IndexedDB records.
+- Use Web Crypto encryption with an explicit user-controlled passphrase or another carefully designed browser-side protection mechanism.
+- Do not claim that client-side encryption fully protects secrets from malicious code running in the same browser origin.
+- Provide an app-lock or credential-lock feature.
+- Clear decrypted credentials from memory when practical.
+
+For Android:
+
+- Use Android Keystore-backed encryption.
+- Keep encrypted credentials in private app storage.
+- Never log credentials.
+- Exclude secrets from exported backups.
+
+Prefer direct-to-provider requests when a provider explicitly supports browser clients and the security implications are clearly explained.
+
+If a provider requires a protected server-side secret or browser access is blocked by CORS, provide an optional, separately configured backend proxy. Never put a server secret into frontend code.
+
+Use the minimum permissions necessary.
+
+6. TEXT CHAT
+
+Implement real AI conversations with:
+
+- Streaming responses where supported.
+- Markdown rendering.
+- Code blocks and copy buttons.
+- Tables and lists.
+- Copy response.
+- Retry.
+- Regenerate.
+- Edit and resend.
+- Stop generation.
+- Loading states.
+- Error recovery.
+- Timestamps.
+- Attachment previews.
+
+Save messages locally.
+
+Never fabricate an AI response when a provider request fails.
+
+Use provider-specific request and response adapters.
+
+Sanitize rendered content and do not execute model-generated code automatically.
+
+7. CHAT HISTORY
+
+Use IndexedDB for local conversations.
+
+Support:
+
+- New chat.
+- Rename.
+- Delete.
+- Search.
+- Pin and unpin.
+- Recent and older chat grouping.
+- Open old conversation.
+- Clear all history.
+- Export supported chat data.
+
+Store:
+
+- Conversation ID.
+- Title.
+- Created and updated timestamps.
+- Message records.
+- Selected provider and model metadata.
+- Optional pinned state.
+
+Do not save API secrets in chat history.
+
+Ask for confirmation before destructive actions.
+
+8. IMAGE UPLOAD AND UNDERSTANDING
+
+Support:
+
+- Android photo picker.
+- Browser file picker.
+- Camera capture where supported.
+- Image previews.
+- Attachment removal.
+- File type and size validation.
+- Multiple images when supported.
+
+Send images to a provider only when the user initiates a task that requires it.
+
+Check whether the selected model supports image understanding.
+
+If not, explain how to select a compatible model.
+
+Do not claim to have analyzed an image unless the provider returned a real result.
+
+9. IMAGE GENERATION
+
+Create a dedicated image-generation interface.
+
+Include:
+
+- Prompt input.
+- Style presets.
+- Aspect ratio.
+- Image dimensions or quality settings when supported.
+- Number of images when supported.
+- Model selector.
+- Provider selector.
+- Generate button.
+- Loading and progress indicators.
+- Result gallery.
+- Full-size preview.
+- Save or download.
+- Regenerate.
+- Copy prompt.
+- Local generation history.
+
+Choose an eligible image-generation model automatically in Auto Mode.
+
+In Manual Mode, use only the selected provider unless the user explicitly changes the selection.
+
+Use IndexedDB Blob storage or private native file storage for image files.
+
+Do not substitute a placeholder for a generated result.
+
+10. CONTINUOUS VOICE CHAT
+
+Create a dedicated voice interface with:
+
+- Animated Nova orb.
+- Listening indicator.
+- Processing indicator.
+- Speaking indicator.
+- Microphone toggle.
+- Speaker toggle.
+- End session.
+- Live transcript.
+- Language selection.
+- Voice selection.
+- Connection status.
+
+Implement a real voice session state machine:
+
+Idle → Connecting → Listening → Processing → Speaking → Listening.
+
+Handle interruption, disconnects, permission denial, network loss, and provider errors.
+
+Prefer a supported real-time speech-to-speech model when available.
+
+Otherwise, use a clearly identified pipeline:
+Speech Recognition → AI Text Response → Text-to-Speech.
+
+Do not describe this fallback as a native real-time audio model.
+
+Support:
+
+- Hindi.
+- English.
+- Hinglish.
+- Male voice preference.
+- Female voice preference.
+- Automatic language detection where supported.
+- Speech speed where supported.
+
+Only offer voices actually available through the chosen provider or device.
+
+Request microphone permission when the user starts voice interaction.
+
+Display an obvious recording indicator and a visible stop button.
+
+Do not record or store raw audio by default.
+
+Save transcripts only if the user enables that option.
+
+For Android background audio, implement only supported foreground-service behavior, required permissions, and persistent notification requirements.
+
+Never secretly listen in the background.
+
+11. SMART CONTACT MEMORY AND CALLING
+
+Implement a dedicated Android voice-command service for contact search and phone calling.
+
+Example commands:
+
+- "Papa ko call karo."
+- "Bhaiya ko phone lagao."
+- "Mummy ko call karo."
+- "Call my father."
+- "Papa ko video call karo."
+
+Contact resolution order
+
+1. Search user-approved saved contact memory.
+2. Search Android contacts when permission is granted.
+3. If multiple matches exist, ask the user to choose.
+4. If no match exists, ask the user for the phone number.
+5. Confirm the contact and number before saving or dialing, especially when ambiguity exists.
+6. Open the Android dialer with the resolved number, or place a direct call only if the user has explicitly enabled that behavior and the platform permits it.
+
+For example:
+
+User: "Papa ko call karo."
+
+Nova searches saved memory first. If a number is found, it presents the resolved contact and starts the configured call workflow.
+
+If memory has no match, Nova searches Android contacts.
+
+If neither has a match, Nova asks: "Papa ka phone number kya hai?"
+
+After the user provides the number, Nova may offer to save the contact to local memory and open the dialer.
+
+Requirements
+
+- Support aliases such as Papa, Pappa, Father, Bhaiya, Brother, Mummy, and user-defined nicknames.
+- Allow user-created contacts stored in local memory.
+- Allow edit, delete, and search.
+- Do not merge unrelated people just because their names are similar.
+- Request Android contacts permission only when necessary.
+- Avoid uploading the address book to an AI provider.
+- Use Android intents or documented native APIs.
+- Do not pretend a call was placed if only the dialer was opened.
+
+For normal cellular calls, use the supported Android dialer integration.
+
+For video calls, open the relevant app or supported contact action only when a compatible application is available.
+
+Do not secretly record cellular calls.
+
+12. CUSTOM VOICE COMMAND ENGINE
+
+Create a reusable Custom Commands screen.
+
+Allow the user to define commands with:
+
+- Command name.
+- Voice phrases and aliases.
+- Action type.
+- Parameters.
+- Confirmation requirements.
+- Enabled or disabled status.
+
+Examples:
+
+- "Nova, study mode on karo."
+- "YouTube kholo."
+- "Chrome par JavaScript search karo."
+- "Papa ko call karo."
+- "Flashlight on karo."
+- "Camera kholo."
+- "Phone lock karo."
+
+Implement a command registry and action dispatcher.
+
+Separate command understanding from action execution.
+
+Use deterministic command handlers for sensitive actions such as calls, device settings, and lock operations.
+
+Use AI intent classification only to interpret natural-language variations; validate every action against supported commands and permissions before executing it.
+
+Do not allow model-generated arbitrary shell commands, unrestricted code execution, or arbitrary Android intents.
+
+If a command is unclear, ask a clarifying question.
+
+For destructive, privacy-sensitive, or costly actions, request confirmation.
+
+Display the recognized command and its execution status.
+
+Allow users to review and remove custom commands.
+
+13. YOUTUBE VOICE CONTROL
+
+Support commands such as:
+
+- "YouTube kholo."
+- "YouTube par Minecraft videos search karo."
+- "YouTube par ye video chalao."
+- "YouTube par JavaScript tutorial dikhao."
+- "Agla video kholo."
+
+Behavior
+
+1. Recognize the intent and query.
+2. Open YouTube using a supported Android app intent, verified deep link, or browser URL.
+3. For search commands, use the official YouTube search URL pattern with properly encoded search terms.
+4. Prefer opening the YouTube app when the device supports the link and the user has chosen that behavior.
+5. Allow the user to select a search result when exact playback cannot be reliably determined.
+6. Use official APIs only when their setup and authorization are available.
+
+If a direct video URL is known and supported, open it.
+Do not pretend to know which recommendation YouTube will select.
+Do not bypass authentication, premium restrictions, or YouTube playback controls.
+If playback automation is unavailable, open the relevant results page and explain the limitation.
+14. CHROME AND WEB SEARCH
+Support commands:
+"Chrome kholo."
+"Chrome par JavaScript search karo."
+"Google par Bihar weather search karo."
+"Chrome mein ye website kholo."
+Behavior
+Open Chrome using a supported Android package or intent when available.
+Encode search terms safely.
+Open the appropriate Google search results URL.
+Allow direct URL opening after validating the URL scheme.
+Reject javascript:, file:, and other dangerous schemes unless a specifically authorized and safe workflow requires them.
+Handle Chrome not installed.
+Offer the system browser as a fallback only when allowed by the user's settings.
+Do not claim to control Chrome's internal interface if only a URL has been opened.
+15. INSTAGRAM AND REELS CONTROL
+Support commands such as:
+"Instagram kholo."
+"Instagram Reels kholo."
+"Agli Reel par jao."
+"Reel swipe karo."
+"Instagram band karo."
+Supported implementation
+Open Instagram through an installed app's supported launcher intent or verified deep link.
+Open supported profile or content links where available.
+For swipe gestures, implement a separate optional Android Accessibility Service only if the feature is supported, transparent, and explicitly enabled by the user.
+Explain why Accessibility permission is requested.
+
+Let the user disable the service immediately.
+Restrict automated gestures to explicitly requested actions.
+Avoid collecting unrelated screen content.
+Do not bypass login, security controls, or app restrictions.
+If a reliable Reels-specific deep link is unavailable, open Instagram and let the user navigate to Reels.
+Do not claim a Reel has been swiped if the gesture did not execute successfully.
+Provide a manual fallback when app versions or platform restrictions prevent automation.
+16. SMART PHONE CONTROL
+Create a dedicated App Controls screen and voice command handlers.
+Flashlight
+Commands:
+"Flashlight on karo."
+"Flashlight off karo."
+Use a supported Android native camera/torch integration.
+Check device capability and permission requirements.
+Web support must be capability-checked.
+Wi-Fi
+Commands:
+"Wi-Fi settings kholo."
+"Wi-Fi connect karne ke settings kholo."
+On modern Android versions, direct programmatic Wi-Fi toggling is restricted. Open the appropriate system settings panel or Internet settings screen when direct control is unavailable.
+Never claim Wi-Fi was turned on unless the state is actually verified through an authorized supported API.
+Internet and mobile data
+Commands:
+"Internet settings kholo."
+"Mobile data settings kholo."
+Open supported Android settings screens.
+Do not promise direct mobile-data toggling when the OS restricts it.
+Camera and photos
+Commands:
+"Camera kholo."
+"Photo kheencho."
+"Selfie lo."
+Use a native camera integration when available.
+For taking a photo:
+Open or invoke the supported camera capture flow.
+Request camera permission if needed.
+Capture only after the user has explicitly requested the action.
+Show the captured photo.
+Allow the user to save or discard it.
+Do not secretly capture photos.
+Screen lock
+Command:
+"Phone lock kar do."
+Implement an optional native Android screen-lock integration using a supported Device Administrator or equivalent approved mechanism.
+Explain any required system setup and permission.
+Do not request device administrator privileges for unrelated functionality.
+Do not unlock the phone.
+Never bypass Android lock-screen authentication, PIN, password, biometrics, or security policy.
+Permissions and capability reporting
+For each action:
+Check capability.
+Request only necessary permissions.
+Show success or failure.
+Explain unsupported features.
+Provide a system-settings shortcut where available.
+Do not use Accessibility Service as a universal bypass for Android security restrictions.
+17. PERSONAL MEMORY
+Create a local Memory Manager.
+Include:
+User name and preferences.
+Conversation-related memories.
+Custom notes.
+User-approved social account references.
+Important contacts.
+Call notes.
+Saved voice transcripts when enabled.
+Allow:
+Add.
+Search.
+Edit.
+Delete.
+Categorize.
+Pin.
+Export.
+Clear all.
+Enable or disable memory.
+Control which entries can be included in AI requests.
+Retrieve only relevant entries and only when memory is enabled.
+Do not assume an AI provider has persistent memory between API requests.
+Keep contact numbers and personal information local whenever possible.
+Do not upload memory content to extra providers during model collaboration without user consent.
+18. SETTINGS AND PRIVACY
+Include:
+
+Theme.
+Language.
+Preferred name.
+AI response style.
+Default provider.
+Default models.
+Auto Mode settings.
+Manual Mode settings.
+Automatic fallback.
+Multi-Model Collaboration.
+Maximum request budget.
+Voice settings.
+Memory controls.
+Notification settings.
+Permission status.
+Export and import.
+Clear chat history.
+Clear memory.
+Clear generated images.
+Lock credentials.
+Reset app data.
+About and troubleshooting.
+Notifications must be opt-in.
+Request camera, microphone, contacts, notification, and accessibility permissions only when their associated feature is invoked.
+Explain the reason for each permission.
+19. LOCAL-FIRST STORAGE
+Use IndexedDB for web data and private native storage for Android data.
+Suggested entities:
+Conversations:
+id
+title
+createdAt
+updatedAt
+pinned
+Messages:
+id
+conversationId
+role
+content
+attachments
+createdAt
+status
+providerId
+modelId
+Provider configurations:
+id
+providerId
+displayName
+endpoint
+selectedModels
+enabled
+credentialReference
+Do not store plaintext credentials in ordinary database records.
+Memories:
+id
+category
+title
+content
+createdAt
+updatedAt
+enabledForContext
+Generated images:
+id
+prompt
+providerId
+modelId
+imageBlobReferencimageBlobReference
+createdAt
+Settings:
+theme
+language
+routingMode
+fallbackPolicy
+collaborationSettings
+voicePreferences
+privacyPreferences
+Implement versioned schema migrations, validation, safe import, and recovery from storage errors.
+Store images as Blobs or native files rather than unnecessarily large Base64 strings.
+No account or cloud database should be required for the basic local-first application.
+20. WEB APPLICATION AND PWA
+Implement:
+Responsive web interface.
+PWA manifest.
+Installable app metadata.
+Appropriate icons.
+IndexedDB persistence.
+Offline shell where practical.
+Feature detection for browser APIs.
+Safe file handling.
+Do not claim AI requests work offline unless a real local inference engine is installed.
+Do not cache sensitive AI requests or private data in a public service-worker cache.
+21. ANDROID NATIVE INTEGRATION
+Use Capacitor with appropriate native plugins or custom native modules.
+Implement:
+Native application icon.
+Splash screen.
+Keyboard-safe layouts.
+Status bar styling.
+Android back button.
+Photo picker.
+Camera.
+Microphone.
+Secure credential storage.
+Supported app-launch intents.
+Dialer and contact search.
+Notifications.
+Flashlight.
+Optional Accessibility Service for explicitly authorized Reels gestures.
+Optional approved screen-lock integration.
+Use minimum permissions.
+Provide a permission manifest explanation.
+Test app pause/resume, audio cleanup, navigation, and native capability failures.
+Build the APK only when the Android SDK, Gradle, and required plugins are available.
+22. SECURITY REQUIREMENTS
+Never hardcode API secrets.
+Never expose credentials in client logs.
+Never run model-generated code automatically.
+Never execute arbitrary commands based on AI output.
+Never record audio or take photos without an explicit user action.
+Never bypass the Android lock screen.
+Never perform phone calls without the configured authorization and confirmation behavior.
+Never silently upload contacts or personal memory.
+Validate all URLs and external actions.
+Sanitize rendered Markdown and HTML.
+Restrict custom commands to registered handlers.
+Limit AI retries, tool calls, and spending.
+Explain data sharing when multiple providers are used.
+23. ERROR HANDLING
+
+Handle:
+Missing or invalid API key.
+Provider authentication failures.
+Rate limits.
+Quota exhaustion.
+Unsupported models.
+CORS errors.
+Network failures.
+Timeouts.
+Image failures.
+Audio disconnections.
+Permission denial.
+App not installed.
+Native plugin unavailable.
+Contact not found.
+Ambiguous contact.
+Unsupported system setting.
+Storage quota errors.
+Provide friendly messages, recovery steps, and retry buttons where appropriate.
+Never expose credentials in errors.
+Never fake successful phone, browser, or AI actions.
+24. TESTING
+Create automated tests for:
+Chat creation and persistence.
+Chat search and deletion.
+Theme switching.
+API key validation.
+Provider identification.
+Model discovery.
+Auto Mode routing.
+Manual Mode provider isolation.
+Auto fallback policy.
+Multi-Model Collaboration restrictions.
+Coding and image task routing.
+Provider failure handling.
+Image upload and generation.
+Voice state transitions.
+Memory operations.
+Contact resolution order.
+Unknown contact handling.
+Dialer opening.
+YouTube search URLs.
+Chrome search commands.
+Instagram capability fallbacks.
+Flashlight capability checks.
+Camera capture permissions.
+Screen-lock setup requirements.
+Local export and import.
+Credential redaction.
+Mock external API requests in unit tests. Perform manual integration tests with valid credentials.
+Report actual test results; do not claim unexecuted tests passed.
+25. DEVELOPMENT WORKFLOW
+Implement in phases without abandoning the overall requirements.
+Phase 1: Inspect the environment and create the application architecture.
+Phase 2: Build the complete UI, navigation, Dark/Light themes, and local persistence.
+Phase 3: Build the provider manager, Auto Mode, Manual Mode, and task-specific routing.
+Phase 4: Implement actual text chat, streaming, image understanding, and image generation.
+Phase 5: Implement continuous voice chat and supported voice options.
+Phase 6: Implement memory, custom voice commands, contact search, and dialing.
+Phase 7: Implement YouTube, Chrome, Instagram, and supported Android controls.
+Phase 8: Complete security hardening, testing, Android integration, and documentation.
+Do not stop after building the UI.
+If a phase cannot be completed because of missing credentials, native tooling, or unavailable provider capabilities, finish all independent work possible and report the exact blocker.
+26. ACCEPTANCE CRITERIA
+The application must:
+Match the Nova AI design concept.
+Provide working navigation.
+Persist chats and memory locally.
+Support real configured AI responses.
+Offer API provider and model selection.
+Support Auto and Manual modes.
+Respect Manual Mode provider isolation.
+Route tasks according to supported model capabilities.
+Support image upload and compatible image generation.
+Support configured voice conversations.
+Support Hindi, English, and Hinglish preferences.
+Resolve contacts through memory first, then Android contacts.
+Ask for a number if no contact exists.
+Open the dialer through supported Android integration.
+Open YouTube and Chrome for supported voice commands.
+Provide optional, permission-based Instagram gesture automation.
+Implement supported flashlight, camera, and screen-lock features.
+Never unlock the phone.
+Provide functional settings and permission handling.
+Avoid plaintext API-key storage in ordinary browser storage.
+Build the web application successfully.
+Produce a verified Android APK when the environment supports it.
+27. FINAL DELIVERABLES
+Provide:
+Complete source code.
+Working web preview when supported.
+PWA installation instructions.
+Android project files.
+A verified debug APK link if generated.
+Release APK build instructions.
+API provider setup documentation.
+Native Android permission setup.
+Local storage and backup documentation.
+Test results.
+Known limitations.
+A checklist of complete, partial, and unavailable features.
+Start implementing the real application now. Inspect the project, create the required files, connect the services, run the tests, fix errors, and continue through the implementation phases. Do not return only a plan or a static UI prototype.
+
+add free api from https://github.com/public-apis/public-apis GitHub repository if possible and hide all free api key from frontend .
